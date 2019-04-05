@@ -1,6 +1,7 @@
 package org.inigo.izenak
 
 import java.io.IOException
+import java.lang.IllegalArgumentException
 import java.net.MalformedURLException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLHandshakeException

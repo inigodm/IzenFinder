@@ -8,8 +8,7 @@ class HTML_scrappes{
     @Test
     fun if_gets_all_20_names_from_a_page(){
         val ws : WebScrapper = WebScrapper()
-        val finder: IzenFinder = IzenFinder()
-        var names: List<Izena> = ws.obtainIzenak(finder.getHtmlDocument(url))
+        var names: List<IzenData> = ws.obtainIzenDatakFrom(ws.getHtmlDocument(url))
         assertEquals(20, names.size)
     }
 
