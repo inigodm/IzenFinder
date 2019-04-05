@@ -4,7 +4,7 @@ import java.net.URL
 
 class IzenFinder {
 
-    fun downloadPage(url: String): String {
-        return (URL(url)).openConnection()?.getInputStream()?.bufferedReader().use { it!!.readText() }
-    }
+    fun downloadPage(url: String): String = throwsServiceException({
+        return@throwsServiceException (URL(url)).openConnection()?.getInputStream()?.bufferedReader().use { it!!.readText() }
+    })
 }
