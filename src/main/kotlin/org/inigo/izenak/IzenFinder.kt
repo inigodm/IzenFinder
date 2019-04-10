@@ -1,5 +1,9 @@
 package org.inigo.izenak
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -10,10 +14,8 @@ class WebScrapper{
         return@throwsServiceException Jsoup.connect("$url&lang=es").userAgent("Mozilla/5.0").timeout(100000).get()
     }
 
-    fun obtainIzenDatakFrom(doc: Document): List<IzenData> {
-        return doc.select("a.list-group-item").map {
-                    println("Data for ${it.text()}");
-              IzenData(izena=it.text(), esanahia=obtainIzenEsanahia(getHtmlDocument(it.attr("href"))))}
+    suspend fun obtainIzenDatakFrom(doc: Document): List<IzenData> {
+        return doc.select("a.list-group-item").pmap {IzenData(izena=it.text(), esanahia=obtainIzenEsanahia(getHtmlDocument(it.attr("href")))) }
     }
 
     fun obtainIzenEsanahia(doc: Document): String {
@@ -30,7 +32,7 @@ class WebScrapper{
         var webDoc: Document
         while(url != "") {
             webDoc = getHtmlDocument(url)
-            res.addAll(obtainIzenDatakFrom(webDoc))
+            res.addAll(runBlocking { obtainIzenDatakFrom(webDoc) } )
             url = obtainNextPageUrl(webDoc)
             Thread.sleep(1000)
         }
@@ -39,3 +41,7 @@ class WebScrapper{
 }
 
 data class IzenData(var izena: String, var esanahia: String = "")
+
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async(Dispatchers.IO)  { f(it) } }.map { it.await() }
+}

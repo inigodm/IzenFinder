@@ -1,21 +1,22 @@
 package org.inigo.izenak
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class HTML_scrappes{
+class HTML_scrappes_if{
     val url: String = "https://www.euskaltzaindia.eus/index.php?option=com_eoda&Itemid=469&lang=es&sexua=E&view=izenak"
     @Test
-    fun if_gets_all_20_izenData_from_a_page(){
+    fun gets_all_20_izenData_from_a_page(){
         val ws : WebScrapper = WebScrapper()
-        var names: List<IzenData> = ws.obtainIzenDatakFrom(ws.getHtmlDocument(url))
+        var names: List<IzenData> = runBlocking { ws.obtainIzenDatakFrom(ws.getHtmlDocument(url)) }
         assertEquals(20, names.size)
         names.forEach{ println("${it.izena} --> ${it.esanahia}") }
     }
 
     @Test
-    fun if_get_description_from_a_name(){
+    fun get_description_from_a_name(){
         val ws : WebScrapper = WebScrapper()
         var url: String = "https://www.euskaltzaindia.eus/es/?option=com_eoda&Itemid=792&view=izenak&testua=Abeli%C3%B1e"
         var izenInfo: String = ws.obtainIzenEsanahia(ws.getHtmlDocument(url))
@@ -25,14 +26,14 @@ class HTML_scrappes{
     }
 
     @Test
-    fun if_get_link_to_next_page(){
+    fun get_link_to_next_page(){
         val ws : WebScrapper = WebScrapper()
         var next: String = ws.obtainNextPageUrl(ws.getHtmlDocument(url))
         assertTrue { next.startsWith("https://") }
     }
 
     @Test
-    fun if_last_page_has_no_next_url(){
+    fun last_page_has_no_next_url(){
         var url = "https://www.euskaltzaindia.eus/index.php?option=com_eoda&Itemid=469&view=izenak&sexua=E&nonhasi=Zutoia"
         val ws : WebScrapper = WebScrapper()
         var next: String = ws.obtainNextPageUrl(ws.getHtmlDocument(url))
