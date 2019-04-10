@@ -16,7 +16,7 @@ class HTML_scrappes_if{
     }
 
     @Test
-    fun get_description_from_a_name(){
+    fun gets_description_from_a_name(){
         val ws : WebScrapper = WebScrapper()
         var url: String = "https://www.euskaltzaindia.eus/es/?option=com_eoda&Itemid=792&view=izenak&testua=Abeli%C3%B1e"
         var izenInfo: String = ws.obtainIzenEsanahia(ws.getHtmlDocument(url))
@@ -26,7 +26,7 @@ class HTML_scrappes_if{
     }
 
     @Test
-    fun get_link_to_next_page(){
+    fun gets_link_to_next_page(){
         val ws : WebScrapper = WebScrapper()
         var next: String = ws.obtainNextPageUrl(ws.getHtmlDocument(url))
         assertTrue { next.startsWith("https://") }
