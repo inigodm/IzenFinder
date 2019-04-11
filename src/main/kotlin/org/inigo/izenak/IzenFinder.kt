@@ -14,8 +14,8 @@ class WebScrapper{
         return@throwsServiceException Jsoup.connect("$url&lang=es").userAgent("Mozilla/5.0").timeout(100000).get()
     }
 
-    suspend fun obtainIzenDatakFrom(doc: Document): List<IzenData> {
-        return doc.select("a.list-group-item").pmap {IzenData(izena=it.text(), esanahia=obtainIzenEsanahia(getHtmlDocument(it.attr("href")))) }
+    fun obtainIzenDatakFrom(doc: Document): List<IzenData> = runBlocking {
+        doc.select("a.list-group-item").pmap {IzenData(izena=it.text(), esanahia=obtainIzenEsanahia(getHtmlDocument(it.attr("href")))) }
     }
 
     fun obtainIzenEsanahia(doc: Document): String {
@@ -34,7 +34,6 @@ class WebScrapper{
             webDoc = getHtmlDocument(url)
             res.addAll(runBlocking { obtainIzenDatakFrom(webDoc) } )
             url = obtainNextPageUrl(webDoc)
-            Thread.sleep(1000)
         }
         return res
     }

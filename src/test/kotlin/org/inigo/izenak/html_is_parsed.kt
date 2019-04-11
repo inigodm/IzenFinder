@@ -10,7 +10,7 @@ class HTML_scrappes_if{
     @Test
     fun gets_all_20_izenData_from_a_page(){
         val ws : WebScrapper = WebScrapper()
-        var names: List<IzenData> = runBlocking { ws.obtainIzenDatakFrom(ws.getHtmlDocument(url)) }
+        var names: List<IzenData> = ws.obtainIzenDatakFrom(ws.getHtmlDocument(url))
         assertEquals(20, names.size)
         names.forEach{ println("${it.izena} --> ${it.esanahia}") }
     }
