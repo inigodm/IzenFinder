@@ -76,10 +76,10 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>test</id>
-                        <phase>test</phase>
+                        <id>test-kapt</id>
+                        <phase>test-kapt</phase>
                         <goals>
-                            <goal>test</goal>
+                            <goal>test-kapt</goal>
                         </goals>
                         <configuration>
                             <sourceDirs>
